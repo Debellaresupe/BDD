@@ -31,10 +31,9 @@ public class ReplenishmentPage {
         return new DashboardPage();
     }
 
-    public DashboardPage waitingError() {
-        $("#root").shouldBe(Condition.visible, Duration.ofSeconds(15));
-        $("#root").shouldHave(Condition.exactText("Ошибка"));
-        return new DashboardPage();
+    public void waitingError() {
+        errorNotification.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        errorNotification.shouldHave(Condition.exactText("Ошибка"));
     }
 
 }

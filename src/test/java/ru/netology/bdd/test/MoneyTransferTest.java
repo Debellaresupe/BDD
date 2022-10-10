@@ -23,36 +23,42 @@ public class MoneyTransferTest {
     @Test
     void shouldTransferMoneyFromFirstToSecondCard() {
         var dashboardPage = new DashboardPage();
+        var firstCardStartBalance = dashboardPage.getCardBalance(DataHelper.getFirstCard().getId());
+        var secondCardStartBalance = dashboardPage.getCardBalance(DataHelper.getSecondCard().getId());
         dashboardPage.replenishSecondCardClick();
         var replenishmentPage = new ReplenishmentPage();
         var amount = 7000;
         replenishmentPage.transferCardToCard(String.valueOf(amount), DataHelper.getFirstCard());
         var firstCardBalance = dashboardPage.getCardBalance(DataHelper.getFirstCard().getId());
         var secondCardBalance = dashboardPage.getCardBalance(DataHelper.getSecondCard().getId());
-        assertEquals(10000 - amount, firstCardBalance);
-        assertEquals(10000 + amount, secondCardBalance);
+        assertEquals(firstCardStartBalance - amount, firstCardBalance);
+        assertEquals(secondCardStartBalance + amount, secondCardBalance);
     }
     @Test
     void shouldTransferMoneyFromSecondToFirstCard() {
         var dashboardPage = new DashboardPage();
+        var firstCardStartBalance = dashboardPage.getCardBalance(DataHelper.getFirstCard().getId());
+        var secondCardStartBalance = dashboardPage.getCardBalance(DataHelper.getSecondCard().getId());
         dashboardPage.replenishFirstCardClick();
         var replenishmentPage = new ReplenishmentPage();
-        var amount = 3500;
+        var amount = 7000;
         replenishmentPage.transferCardToCard(String.valueOf(amount), DataHelper.getSecondCard());
         var firstCardBalance = dashboardPage.getCardBalance(DataHelper.getFirstCard().getId());
         var secondCardBalance = dashboardPage.getCardBalance(DataHelper.getSecondCard().getId());
-        assertEquals(10000 + amount, firstCardBalance);
-        assertEquals(10000 - amount, secondCardBalance);
+        assertEquals(firstCardStartBalance + amount, firstCardBalance);
+        assertEquals(secondCardStartBalance - amount, secondCardBalance);
     }
     @Test
     void shouldNotTransferAmountGreaterBalanceFromSecondToFirstCard() {
         var dashboardPage = new DashboardPage();
+        var firstCardStartBalance = dashboardPage.getCardBalance(DataHelper.getFirstCard().getId());
+        var secondCardStartBalance = dashboardPage.getCardBalance(DataHelper.getSecondCard().getId());
         dashboardPage.replenishFirstCardClick();
         var replenishmentPage = new ReplenishmentPage();
         var amount = 11000;
         replenishmentPage.transferCardToCard(String.valueOf(amount), DataHelper.getSecondCard());
         replenishmentPage.waitingError();
-        assertEquals(10000, dashboardPage.getCardBalance(DataHelper.getFirstCard().getId()));
-        assertEquals(10000, dashboardPage.getCardBalance(DataHelper.getSecondCard().getId()));
+        assertEquals(firstCardStartBalance, dashboardPage.getCardBalance(DataHelper.getFirstCard().getId()));
+        assertEquals(secondCardStartBalance, dashboardPage.getCardBalance(DataHelper.getSecondCard().getId()));
     }
 }
